@@ -1,21 +1,33 @@
 import React, { Component } from 'react'
-import mui, { AppBar, Card, FlatButton,
-  TextField, RaisedButton, CircularProgress } from 'material-ui'
+import Reflux from 'Reflux'
+import mui, { AppBar, Card, FlatButton, TextField, RaisedButton, CircularProgress } from 'material-ui'
+import actions from '../actions/dashboard'
 
+const store = Reflux.createStore({
+  listenables: [actions],
 
-class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      loggedIn: false
-    }
+  onLogin() {
+    // Perform authentication here
+    this.trigger({ loggedIn:true })
+  },
+
+  getInitialState() {
+    return { loggedIn: false }
   }
+})
 
-  handleClick() {
-    this.setState({
-      loggedIn: true
-    })
-  }
+const App = React.createClass({
+
+  mixins: [Reflux.connect(store)],
+
+  handleUsername(e) {
+    e.preventDefault()
+
+  },
+
+  handlePassword(e) {
+    e.preventDefault()
+  },
 
   render() {
     let view = this.state.loggedIn ?
@@ -29,17 +41,19 @@ class App extends Component {
           <Card className="loginCard">
               <br />
             <TextField
+              label="Username"
               hintText="Username" />
               <br />
             <TextField
               className="passwordField"
+              label="Username"
               hintText="Password"
               type="password" />
               <br />
             <RaisedButton
               label="Login"
               secondary={true}
-              onClick={this.handleClick.bind(this)}
+              onClick={actions.login}
               style={{
                 marginTop: '40px',
                 marginLeft: '80px'
@@ -53,5 +67,7 @@ class App extends Component {
       </div>
     )
   }
-}
+
+})
+
 export default App
