@@ -20,3 +20,9 @@ body {
 .loginCard {
   padding: 70px 60px;
 }
+
+.addItemCard {
+  @include centerer;
+  padding: 100px 400px;
+  margin: 400px 0px;
+}
