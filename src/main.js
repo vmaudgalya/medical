@@ -4,4 +4,4 @@ import App from './components/App'
 import Form from './components/Form'
 require('./main.scss')
 
-ReactDOM.render(<Form />, document.getElementById('container'))
+ReactDOM.render(<App />, document.getElementById('container'))
