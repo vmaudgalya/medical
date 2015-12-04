@@ -1,7 +1,7 @@
 import Reflux from 'Reflux'
 
-var DashboardActions = Reflux.createActions({
-  'login' : {children: ['success', 'failure']}
-});
+var DashboardActions = Reflux.createActions([
+  'login'
+])
 
-module.exports = DashboardActions;
+module.exports = DashboardActions

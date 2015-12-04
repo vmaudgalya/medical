@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import mui, {Card, RaisedButton, TextField, Tabs, Tab, Table, TableRow, TableHeader, TableHeaderColumn, TableBody, TableRowColumn } from 'material-ui'
 import actions from '../actions/dashboard'
+import { History, Link } from 'react-router'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
 
@@ -17,7 +18,8 @@ class Form extends Component {
       multiSelectable: true,
       enableSelectAll: false,
       deselectOnClickaway: true,
-      height: '300px'
+      height: '300px',
+      loggedIn: false
     }
   }
 
@@ -105,6 +107,10 @@ class Form extends Component {
               </TableRow>
             </TableBody>
             </Table>
+            <ul>
+            <li><Link to="/login">GO TO LOGIN</Link></li>
+            </ul>
+            {this.props.children}
           </Tab>
       </Tabs>
     )
