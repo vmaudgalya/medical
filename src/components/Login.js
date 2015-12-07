@@ -1,94 +1,13 @@
 import React, { Component } from 'react'
 import Reflux from 'Reflux'
 import mui, { AppBar, Card, FlatButton, TextField, RaisedButton, CircularProgress } from 'material-ui'
-import DashboardActions from '../actions/dashboard'
-import _ from 'lodash'
+import DashboardActions from '../actions/DashboardActions'
+import loginStore from '../stores/Login'
 import { History } from 'react-router'
-
-let users = [
-    {"username":"admin", "password":"admin"},
-    {"username":"user2", "password":"password2"},
-    {"username":"user3","password":"password3"}
-]
-
-
-const store = Reflux.createStore({
-  listenables: [DashboardActions],
-
-  authenticateUser(username, password, login) {
-    let userExists = false
-    let user = { username, password }
-    for (let i = 0; i < users.length; i++) {
-      if (_.isEqual(users[i], user)) {
-        userExists = true
-      }
-    }
-    if (userExists) {
-      this.trigger({
-        loggedIn: true,
-        isLoading: false
-      })
-      login()
-      console.log('Success!');
-    } else {
-      this.trigger({
-        isLoading: false,
-        usernameErrorText: 'Invalid login',
-        passwordErrorText: 'Invalid login'
-      })
-      console.log('Failure');
-    }
-  },
-
-  onLogin(username, password, router) {
-    // Perform authentication here
-    this.trigger({
-      isLoading: true
-    })
-    let errorMessage = "This field is required"
-    if (!username && !password) {
-      this.trigger({
-        usernameErrorText: errorMessage,
-        passwordErrorText: errorMessage
-      })
-      return
-    } else if (!username) {
-      this.trigger({
-        usernameErrorText: errorMessage,
-        passwordErrorText: ""
-      })
-      return
-    } else if (!password) {
-      this.trigger({
-        usernameErrorText: "",
-        passwordErrorText: errorMessage
-      })
-      return
-    }
-    this.trigger({
-      usernameErrorText: "",
-      passwordErrorText: ""
-    })
-
-    setTimeout(() => this.authenticateUser(username, password, router), 3000) // Simulate API call
-
-  },
-
-  getInitialState() {
-    return {
-      isLoading: false,
-      loggedIn: false,
-      username: null,
-      password: null,
-      usernameErrorText: "",
-      passwordErrorText: ""
-    }
-  }
-})
 
 const Login = React.createClass({
 
-  mixins: [Reflux.connect(store), History],
+  mixins: [Reflux.connect(loginStore), History],
 
   _handleUsername(e) {
     e.preventDefault()
@@ -101,6 +20,12 @@ const Login = React.createClass({
 
   _handleLoginClick() {
     DashboardActions.login(this.state.username, this.state.password, this.navigateAfterSomethingHappened)
+  },
+
+  _handleKeyDown(e) {
+    if (e.key === 'Enter' && this.state.username && this.state.password) {
+      this._handleLoginClick()
+    }
   },
 
   navigateAfterSomethingHappened() {
@@ -125,7 +50,8 @@ const Login = React.createClass({
               floatingLabelText="Username"
               hintText="Username"
               errorText={this.state.usernameErrorText}
-              onChange={this._handleUsername} />
+              onChange={this._handleUsername}
+              onKeyDown={this._handleKeyDown} />
               <br />
             <TextField
               className="passwordField"
@@ -134,10 +60,12 @@ const Login = React.createClass({
               hintText="Password"
               errorText={this.state.passwordErrorText}
               type="password"
-              onChange={this._handlePassword} />
+              onChange={this._handlePassword}
+              onKeyDown={this._handleKeyDown} />
               <br />
             <RaisedButton
               label="Login"
+              type="submit"
               secondary={true}
               disabled={!(this.state.username && this.state.password)}
               onClick={this._handleLoginClick}

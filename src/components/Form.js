@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import mui, {Card, RaisedButton, TextField, Tabs, Tab, Table, TableRow, TableHeader, TableHeaderColumn, TableBody, TableRowColumn } from 'material-ui'
-import actions from '../actions/dashboard'
+import DashboardActions from '../actions/DashboardActions'
 import { History, Link } from 'react-router'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
@@ -19,7 +19,7 @@ class Form extends Component {
       enableSelectAll: false,
       deselectOnClickaway: true,
       height: '300px',
-      loggedIn: false
+      loggedIn: false // TODO Listen to login event from login store
     }
   }
 
@@ -108,7 +108,7 @@ class Form extends Component {
             </TableBody>
             </Table>
             <ul>
-            <li><Link to="/login">GO TO LOGIN</Link></li>
+            <li><Link to="/login">Log out</Link></li> {/*This should clear the user*/}
             </ul>
             {this.props.children}
           </Tab>
