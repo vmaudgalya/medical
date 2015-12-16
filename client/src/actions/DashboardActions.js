@@ -1,7 +1,7 @@
 import Reflux from 'Reflux'
 
 var DashboardActions = Reflux.createActions([
-  'login'
+  'login', 'addItem'
 ])
 
 module.exports = DashboardActions

@@ -1,6 +1,6 @@
 {
-  "name": "medical",
-  "version": "0.0.0",
+  "name": "medical-client",
+  "version": "1.0.0",
   "description": "A dashboard for doctors to manipulate data",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "author": "Varun Maudgalya",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vmaudgalya/medical.git"
+    "url": "git+https://github.com/vmaudgalya/medical.git"
   },
   "license": "MIT",
   "dependencies": {
@@ -30,6 +30,7 @@
     "react-router": "^1.0.0",
     "react-tap-event-plugin": "^0.2.1",
     "reflux": "^0.3.0",
+    "rethinkdb": "^2.2.0",
     "sass-loader": "^3.1.1",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.8",
