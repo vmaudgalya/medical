@@ -11,6 +11,10 @@ const MedicineDetails = React.createClass({
 
   mixins: [Reflux.connect(Store), History],
 
+  _handleItemSubmit() {
+    // DashboardActions.addItem()
+  },
+
   componentWillMount() {
     if (!this.state.username) {
       console.info('redirecting unauthorized user')
