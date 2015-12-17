@@ -1,19 +1,22 @@
 {
-  "name": "medical-server",
-  "version": "1.0.0",
-  "description": "Server for handling API calls",
-  "main": "index.js",
+  "name": "hello-world",
+  "version": "0.0.1",
+  "private": true,
+  "description": "New Swagger API Project",
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "test": "swagger project test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vmaudgalya/medical.git"
+  "dependencies": {
+    "express": "^4.12.3",
+    "swagger-express-mw": "^0.1.0"
   },
-  "author": "Varun Maudgalya",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/vmaudgalya/medical/issues"
-  },
-  "homepage": "https://github.com/vmaudgalya/medical#readme"
+  "devDependencies": {
+    "should": "^7.1.0",
+    "supertest": "^1.0.0"
+  }
 }
