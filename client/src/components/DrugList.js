@@ -7,7 +7,7 @@ import { History, Link } from 'react-router'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
 
-const MedicineList = React.createClass({
+const DrugList = React.createClass({
 
   mixins: [Reflux.connect(Store), History],
 
@@ -21,7 +21,7 @@ const MedicineList = React.createClass({
 
   render() {
     return (
-          <Table
+          <Table className="drugList"
             height={this.state.height}
             fixedHeader={this.state.fixedHeader}
             fixedFooter={this.state.fixedFooter}
@@ -81,4 +81,4 @@ const MedicineList = React.createClass({
 
 })
 
-export default MedicineList
+export default DrugList

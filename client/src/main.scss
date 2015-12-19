@@ -23,4 +23,11 @@ body {
 
 .drugDetails {
   @include centerer;
+  margin-top: 300px;
+  padding-right: 500px;
+}
+
+.drugList {
+  @include centerer;
+  margin-top: 400px;
 }

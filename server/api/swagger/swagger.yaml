@@ -4,9 +4,9 @@ info:
   title: Medical App
 # during dev, should point to your local machine
 host: localhost:10010
-# basePath prefixes all resource paths 
+# basePath prefixes all resource paths
 basePath: /medicalapp
-# 
+#
 schemes:
   # tip: remove http to make production-grade
   - http
@@ -20,7 +20,7 @@ produces:
 paths:
   /authdoc:
     # binds a127 app logic to a route
-    x-swagger-router-controller: authDoctor
+    x-swagger-router-controller: authentication
     post:
       description: Returns true if user is authorized to write to the database
       # used as the method name of the controller
@@ -46,6 +46,31 @@ paths:
             # a pointer to a definition
             $ref: "#/definitions/DoctorResponse"
         # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /logout:
+    x-swagger-router-controller: authentication
+    post:
+      description: Handles client logging out
+      operationId: logout
+      parameters:
+        - name: username
+          in: body
+          description: The user object of the user to authenticate
+          required: true
+          schema:
+            required:
+              - username
+            properties:
+              username:
+                type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/DoctorResponse"
         default:
           description: Error
           schema:

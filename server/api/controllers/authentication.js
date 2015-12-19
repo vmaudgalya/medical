@@ -29,7 +29,8 @@ var db = require('../../lib/database');
   we specify that in the exports of this module that 'hello' maps to the function named 'hello'
  */
 module.exports = {
-  authdoc: authdoc
+  authdoc: authdoc,
+  logout: logout
 };
 
 /*
@@ -65,4 +66,10 @@ function authdoc(req, res) {
 
   // this sends back a JSON response which is a single string
   // res.json(message);
+}
+
+function logout(req, res) {
+  var username = req.swagger.params.username.value;
+  logger.info('user logout', {user: username});
+  res.json('user logged out');
 }

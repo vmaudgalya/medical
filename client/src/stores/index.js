@@ -33,48 +33,26 @@ const Store = Reflux.createStore({
   },
 
   onLoginCompleted(response) {
-    let data = {}
-    data.isLoading = false
+    state.isLoading = false
     response = JSON.parse(response)
-    data.loggedIn = response.isAuthorized
+    state.loggedIn = response.isAuthorized
     if (response.isAuthorized) {
       state.username = response.username
     } else {
-      data.usernameErrorText = 'Unauthorized login'
-      data.passwordErrorText = 'Unauthorized login'
+      state.usernameErrorText = 'Unauthorized login'
+      state.passwordErrorText = 'Unauthorized login'
     }
-    this.trigger(data);
+    this.trigger(state);
   },
 
   onLoginFailed(response) {
     console.error('Server is down: ' + response);
   },
 
-  authenticateUser(username, password, login) {
-    let userExists = false
-    let user = { username, password }
-    for (let i = 0; i < users.length; i++) {
-      if (_.isEqual(users[i], user)) {
-        userExists = true
-      }
-    }
-    if (userExists) {
-      state.username = username
-      this.trigger({
-        isLoading: false
-      })
-      login()
-      console.info('Success!')
-    } else {
-      this.trigger({
-        isLoading: false,
-        usernameErrorText: 'Unauthorized login',
-        passwordErrorText: 'Unauthorized login',
-        username: null,
-        password: null
-      })
-      console.info('Failure')
-    }
+  onLogout() {
+    state.username = null;
+    state.loggedIn = false;
+    this.trigger(state);
   }
 
 })
