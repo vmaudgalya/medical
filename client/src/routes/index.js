@@ -9,9 +9,9 @@ import { Router, Route, IndexRoute } from 'react-router'
 
 render((
   <Router>
-    <Route path="/" component={DrugDetails}>
-      <IndexRoute component={DrugDetails}/>
-      <Route path="login" component={DrugDetails} />
+    <Route path="/" component={App}>
+      <IndexRoute component={Login}/>
+      <Route path="login" component={Login} />
       <Route path="details" component={DrugDetails} />
       <Route path="review" component={DrugList} />
     </Route>

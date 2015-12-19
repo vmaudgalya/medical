@@ -11,6 +11,10 @@
   It is a good idea to list the modules that your application depends on in the package.json in the project root
  */
 var util = require('util');
+var r = require('rethinkdb');
+var _ = require('lodash');
+var logger = require('../../lib/logger');
+var db = require('../../lib/database');
 
 /*
  Once you 'require' a module you can reference the things that it exports.  These are defined in module.exports.
@@ -38,8 +42,27 @@ function authdoc(req, res) {
   // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
   var username = req.swagger.params.user.value.username;
   var password = req.swagger.params.user.value.password;
-  var message = util.format('Hello, %s your password is %s!', username, password);
+  var doctor = {username, password};
+  var isAuthorized = false;
+
+  logger.info('authentication request received', {origin: req.headers.origin}, {user: doctor});
+
+  r.db('medical').table('doctors').filter(r.row('username').eq(username).and(r.row('password').eq(password)))
+    .run(db.getConnection(), function(err, cursor) {
+      if (err) throw err;
+      cursor.toArray(function(err, results) {
+        if (err) throw err;
+        if (results.length > 0) isAuthorized = true;
+        if (isAuthorized) {
+          logger.info('user authenticated', {origin: req.headers.origin}, {user: doctor});
+        } else {
+          logger.info('user failed to authenticate', {origin: req.headers.origin}, {user: doctor});
+        }
+        res.json(JSON.stringify({username: username, isAuthorized: isAuthorized}));
+    });
+  });
+
 
   // this sends back a JSON response which is a single string
-  res.json(message);
+  // res.json(message);
 }

@@ -32,12 +32,22 @@ const Store = Reflux.createStore({
     return state;
   },
 
-  onLogin(username, password, router) {
-    // Perform authentication here
-    this.trigger({
-      isLoading: true
-    })
-    setTimeout(() => this.authenticateUser(username, password, router), 3000) // Simulate API call
+  onLoginCompleted(response) {
+    let data = {}
+    data.isLoading = false
+    response = JSON.parse(response)
+    data.loggedIn = response.isAuthorized
+    if (response.isAuthorized) {
+      state.username = response.username
+    } else {
+      data.usernameErrorText = 'Unauthorized login'
+      data.passwordErrorText = 'Unauthorized login'
+    }
+    this.trigger(data);
+  },
+
+  onLoginFailed(response) {
+    console.error('Server is down: ' + response);
   },
 
   authenticateUser(username, password, login) {

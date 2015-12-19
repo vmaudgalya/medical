@@ -18,7 +18,8 @@ const Login = React.createClass({
   },
 
   _handleLoginClick() {
-    DashboardActions.login(this.state.username, this.state.password, this.navigateAfterSomethingHappened)
+    this.setState({ isLoading: true })
+    DashboardActions.login(this.state.username, this.state.password)
   },
 
   _handleKeyDown(e) {
@@ -39,8 +40,10 @@ const Login = React.createClass({
     this.setState({ passwordErrorText: errorText })
   },
 
-  navigateAfterSomethingHappened() {
-    this.history.pushState(null, '/details', null);
+  componentDidUpdate() {
+    if (this.state.loggedIn) {
+      this.history.pushState(null, '/details', null)
+    }
   },
 
   render() {
