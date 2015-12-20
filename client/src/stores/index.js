@@ -22,7 +22,8 @@ let state = {
   multiSelectable: true,
   enableSelectAll: false,
   deselectOnClickaway: true,
-  height: '300px'
+  height: '300px',
+  selectedTab: 0
 }
 
 const Store = Reflux.createStore({

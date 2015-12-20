@@ -14,7 +14,7 @@ const Container = React.createClass({
   mixins: [Reflux.connect(Store), History],
 
   _handleChangeTabs(value, e, tab) {
-    console.log("value: " + value)
+    this.setState({ selectedTab: Number(value) })
   },
 
   componentDidUpdate() {
@@ -22,6 +22,7 @@ const Container = React.createClass({
       console.info('redirecting unauthorized user')
       this.history.pushState(null, '/login', null)
     }
+
   },
 
   componentWillMount() {
@@ -37,41 +38,43 @@ const Container = React.createClass({
   },
 
   render() {
-      var styles = {
-        appBar: {
-          flexWrap: 'wrap'
-        },
-        tabs: {
-          paddingTop: '20px',
-          width: '50%'
-        },
-        tab: {
-          paddingBottom: '10px',
-          fontSize: '18px'
-        },
-        inkBar: {
-          backgroundColor: 'rgb(239, 249, 58)',
-        },
-        logout: {
-          paddingBottom: '10px',
-          fontSize: '18px',
-          margin: '0px 0px 0px 0px',
-          paddingRight: '10px',
-          paddingTop: '20px',
-          backgroundColor: 'rgba(34, 75, 12, 0)',
-          color: 'rgba(255, 255, 255, 0.55)'
-        }
-      };
+    var styles = {
+      appBar: {
+        flexWrap: 'wrap'
+      },
+      tabs: {
+        paddingTop: '20px',
+        width: '20%'
+      },
+      tab: {
+        paddingBottom: '10px',
+        fontSize: '18px'
+      },
+      inkBar: {
+        backgroundColor: 'rgb(239, 249, 58)'
+      },
+      logout: {
+        paddingBottom: '10px',
+        fontSize: '18px',
+        margin: '0px 0px',
+        paddingRight: '10px',
+        paddingTop: '20px',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        color: 'rgba(255, 255, 255, 0.55)'
+      }
+    };
+    let view = (this.state.selectedTab === 0 ? <DrugDetails /> : <DrugList />)
 
     return (
       <div>
-        <AppBar title="Amazing Medical App" style={styles.appBar} showMenuIconButton={false} >
-          <Tabs onChange={this._handleChangeTabs} inkBarStyle={styles.inkBar} style={styles.tabs}>
-            <Tab label="ADD" value="0" style={styles.tab}><DrugDetails /></Tab>
-            <Tab label="REVIEW" value="1" style={styles.tab}><DrugList /></Tab>
+        <AppBar style={styles.appBar} title="Amazing Medical App" showMenuIconButton={false} >
+          <Tabs style={styles.tabs} onChange={this._handleChangeTabs} inkBarStyle={styles.inkBar} >
+            <Tab style={styles.tab} label="ADD" value="0" />
+            <Tab style={styles.tab} label="REVIEW" value="1" />
           </Tabs>
           <FlatButton style={styles.logout} onClick={this._handleLogout}>LOGOUT</FlatButton>
         </AppBar>
+        {view}
       </div>
     )
   }
