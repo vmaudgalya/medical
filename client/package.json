@@ -24,7 +24,7 @@
     "history": "^1.13.1",
     "jquery": "^2.1.4",
     "lodash": "^3.10.1",
-    "material-ui": "^0.13.3",
+    "material-ui": "^0.13.4",
     "node-sass": "^3.4.2",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",

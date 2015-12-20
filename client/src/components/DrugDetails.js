@@ -1,6 +1,6 @@
 import Reflux from 'Reflux'
-import React, { Component } from 'react'
-import { Card, FlatButton, RaisedButton, TextField, AppBar, Tabs, Tab } from 'material-ui'
+import React from 'react'
+import { RaisedButton, TextField, DropDownMenu } from 'material-ui'
 import DashboardActions from '../actions/DashboardActions'
 import Store from '../stores'
 import { History, Link } from 'react-router'
@@ -11,34 +11,28 @@ const DrugDetails = React.createClass({
 
   mixins: [Reflux.connect(Store), History],
 
-  _handleChangeTabs(value, e, tab) {
-    console.log("value: " + value)
+  _handleItemSubmit() {
+    // submit based on state of all input fields
+    console.log('submitted item');
   },
 
-  // componentDidUpdate() {
-  //   if (!this.state.username) {
-  //     console.info('redirecting unauthorized user')
-  //     this.history.pushState(null, '/login', null)
-  //   }
-  // },
-  //
-  // componentWillMount() {
-  //   if (!this.state.username) {
-  //     console.info('redirecting unauthorized user')
-  //     this.history.pushState(null, '/login', null)
-  //   }
-  // },
-
   render() {
+    let options = [
+       { payload: '1', text: 'Over the counter' },
+       { payload: '2', text: 'Prescription' }
+    ]
+
     return (
       <div className="drugDetails">
         <TextField
-          hintText="Medicine Name"
-          floatingLabelText="Medicine Name" />
+          hintText="Drug Name"
+          floatingLabelText="Drug Name" />
         <br />
         <TextField
           hintText="Class"
           floatingLabelText="Class" />
+        <br />
+        <DropDownMenu menuItems={options} labelStyle={{fontFamily: 'Roboto, sans-serif'}}/>
         <br />
         <TextField
           hintText="Symptoms"

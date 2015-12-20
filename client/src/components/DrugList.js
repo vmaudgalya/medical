@@ -1,6 +1,6 @@
 import Reflux from 'Reflux'
 import React, { Component } from 'react'
-import {Card, RaisedButton, TextField, Table, TableRow, TableHeader, TableHeaderColumn, TableBody, TableRowColumn } from 'material-ui'
+import { Table, TableRow, TableHeader, TableHeaderColumn, TableBody, TableRowColumn, TableFooter, RaisedButton } from 'material-ui'
 import DashboardActions from '../actions/DashboardActions'
 import Store from '../stores'
 import { History, Link } from 'react-router'
@@ -12,70 +12,67 @@ const DrugList = React.createClass({
   mixins: [Reflux.connect(Store), History],
 
   componentWillMount() {
-    if (!this.state.username) {
-      console.info('redirecting unauthorized user')
-      this.history.pushState(null, '/login', null)
-    }
     // Fetch medicines from db
   },
 
+  _onRowSelection(selectedRows) {
+    console.log('row selected: ' + selectedRows)
+    // save this to state
+  },
+
+  _handleEditClick() {
+    // get drug info by ID, go to details screen and set fields with current info
+  },
+
+  _handleDeleteClick() {
+    // get drug by ID and delete it from the db
+  },
+
   render() {
+    let rows = []
+    for (let i = 1; i <= 100; i++) {
+      rows.push(
+        <TableRow key={i}>
+          <TableRowColumn>{i}</TableRowColumn>
+          <TableRowColumn>Benadryl</TableRowColumn>
+          <TableRowColumn>Allergy Medication</TableRowColumn>
+          <TableRowColumn>admin</TableRowColumn>
+        </TableRow>
+      )
+    }
     return (
-          <Table className="drugList"
-            height={this.state.height}
-            fixedHeader={this.state.fixedHeader}
-            fixedFooter={this.state.fixedFooter}
-            selectable={this.state.selectable}
-            multiSelectable={this.state.multiSelectable}
-            onRowSelection={this._onRowSelection}>
-              <TableHeader enableSelectAll={this.state.enableSelectAll}>
-                <TableRow>
-                  <TableHeaderColumn tooltip='Medicine Name'>Name</TableHeaderColumn>
-                  <TableHeaderColumn tooltip='Medicine Type'>Type</TableHeaderColumn>
-                  <TableHeaderColumn tooltip='Current Status'>Status</TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-              <TableBody
-                deselectOnClickaway={this.state.deselectOnClickaway}
-                showRowHover={this.state.showRowHover}
-                stripedRows={this.state.stripedRows}>
-              <TableRow>
-                  <TableRowColumn>1</TableRowColumn>
-                  <TableRowColumn>John Smith</TableRowColumn>
-                  <TableRowColumn>Employed</TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>2</TableRowColumn>
-                  <TableRowColumn>Randal Peterson</TableRowColumn>
-                  <TableRowColumn>Unemployed</TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>3</TableRowColumn>
-                  <TableRowColumn>Stephanie Sanders</TableRowColumn>
-                  <TableRowColumn>Employed</TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>4</TableRowColumn>
-                  <TableRowColumn>Steve Howie</TableRowColumn>
-                  <TableRowColumn>Employed</TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>5</TableRowColumn>
-                  <TableRowColumn>Joyce Whitten</TableRowColumn>
-                  <TableRowColumn>Employed</TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>6</TableRowColumn>
-                  <TableRowColumn>Samuel Roberts</TableRowColumn>
-                  <TableRowColumn>Unemployed</TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>7</TableRowColumn>
-                  <TableRowColumn>Adam Moore</TableRowColumn>
-                  <TableRowColumn>Employed</TableRowColumn>
-                </TableRow>
-              </TableBody>
-            </Table>
+      <div>
+        <Table
+          height={500}
+          fixedHeader={this.state.fixedHeader}
+          selectable={this.state.selectable}
+          onRowSelection={this._onRowSelection}>
+          <TableHeader displaySelectAll={false}>
+            <TableRow>
+              <TableHeaderColumn colSpan="4" tooltip='Super Header' style={{textAlign: 'center'}}>
+                Drug List
+              </TableHeaderColumn>
+            </TableRow>
+            <TableRow>
+              <TableHeaderColumn tooltip='The ID'>ID</TableHeaderColumn>
+              <TableHeaderColumn tooltip='Drug Name'>Name</TableHeaderColumn>
+              <TableHeaderColumn tooltip='Drug Type'>Type</TableHeaderColumn>
+              <TableHeaderColumn tooltip='User who added this drug'>User</TableHeaderColumn>
+            </TableRow>
+          </TableHeader>
+          <TableBody
+            deselectOnClickaway={this.state.deselectOnClickaway}
+            showRowHover={this.state.showRowHover}
+            >
+            {rows}
+          </TableBody>
+        </Table>
+        <div style={{float: 'right', margin: '20px 50px 0px 0px'}}>
+          <RaisedButton label="EDIT" secondary={true} onClick={this._handleEditClick} />
+          {' '}
+          <RaisedButton label="DELETE" primary={true} onClick={this._handleDeleteClick} />
+        </div>
+      </div>
     )
   }
 
