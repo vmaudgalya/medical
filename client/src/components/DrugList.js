@@ -21,7 +21,7 @@ const DrugList = React.createClass({
   },
 
   _handleEditClick() {
-    // get drug info by ID, go to details screen and set fields with current info
+    // GET drug info by ID via an action, set the state in the store, then trigger and set selectedIndex to 0
   },
 
   _handleDeleteClick() {
@@ -30,7 +30,7 @@ const DrugList = React.createClass({
 
   render() {
     let rows = []
-    for (let i = 1; i <= 100; i++) {
+    for (let i = 1; i <= 50; i++) {
       rows.push(
         <TableRow key={i}>
           <TableRowColumn>{i}</TableRowColumn>
@@ -40,12 +40,13 @@ const DrugList = React.createClass({
         </TableRow>
       )
     }
+
     return (
       <div>
         <Table
-          height={500}
-          fixedHeader={this.state.fixedHeader}
-          selectable={this.state.selectable}
+          height='300px'
+          fixedHeader={true}
+          selectable={true}
           onRowSelection={this._onRowSelection}>
           <TableHeader displaySelectAll={false}>
             <TableRow>
@@ -61,8 +62,8 @@ const DrugList = React.createClass({
             </TableRow>
           </TableHeader>
           <TableBody
-            deselectOnClickaway={this.state.deselectOnClickaway}
-            showRowHover={this.state.showRowHover}
+            deselectOnClickaway={true}
+            showRowHover={true}
             >
             {rows}
           </TableBody>

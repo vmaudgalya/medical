@@ -3,7 +3,7 @@ import React from 'react'
 import { RaisedButton, TextField, DropDownMenu } from 'material-ui'
 import DashboardActions from '../actions/DashboardActions'
 import Store from '../stores'
-import { History, Link } from 'react-router'
+import { History } from 'react-router'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
 
@@ -13,7 +13,62 @@ const DrugDetails = React.createClass({
 
   _handleItemSubmit() {
     // submit based on state of all input fields
-    console.log('submitted item');
+    let drug = {
+      drugName: this.state.drugName,
+      drugClass: this.state.drugClass,
+      drugRegulation: this.state.drugRegulation,
+      drugSymptoms: this.state.drugSymptoms,
+      drugInteractions: this.state.drugInteractions,
+      drugDosage: this.state.drugDosage,
+      username: this.state.username
+    }
+    if (this.state.isEditing) {
+      console.log('editting drug right now')
+      // DashboardActions.updateDrug(drug)
+    } else {
+      DashboardActions.addDrug(drug)
+      console.log('submitted drug: ' + JSON.stringify(drug))
+    }
+  },
+
+  _handleNameOnChange(e) {
+    this.setState({ drugName: e.target.value })
+  },
+
+  _handleClassOnChange(e) {
+    this.setState({ drugClass: e.target.value })
+  },
+
+  _handleRegulationOnChange(e, selectedIndex, menuItem) {
+    this.setState({ drugRegulation: menuItem.text })
+  },
+
+  _handleSymptomsOnChange(e) {
+    this.setState({ drugSymptoms: e.target.value })
+  },
+
+  _handleInteractionsOnChange(e) {
+    this.setState({ drugInteractions: e.target.value })
+  },
+
+  _handleDosageOnChange(e) {
+    this.setState({ drugDosage: e.target.value })
+  },
+
+  _validateFieldsPopulated() {
+    if (this.state.drugName && this.state.drugClass &&
+      this.state.drugSymptoms && this.state.drugInteractions && this.state.drugDosage) {
+        return false
+      }
+    return true
+  },
+
+  componentDidMount() {
+    this.refs.drugNameField.setValue(this.state.drugName)
+    this.refs.classField.setValue(this.state.drugClass)
+    this.refs.symptomField.setValue(this.state.drugSymptoms)
+    this.refs.interactionsField.setValue(this.state.drugInteractions)
+    this.refs.dosageField.setValue(this.state.drugDosage)
   },
 
   render() {
@@ -25,28 +80,46 @@ const DrugDetails = React.createClass({
     return (
       <div className="drugDetails">
         <TextField
+          ref="drugNameField"
           hintText="Drug Name"
-          floatingLabelText="Drug Name" />
+          floatingLabelText="Drug Name"
+          onChange={this._handleNameOnChange} />
         <br />
         <TextField
           hintText="Class"
-          floatingLabelText="Class" />
+          ref="classField"
+          floatingLabelText="Class"
+          onChange={this._handleClassOnChange} />
         <br />
-        <DropDownMenu menuItems={options} labelStyle={{fontFamily: 'Roboto, sans-serif'}}/>
+        <DropDownMenu
+          selectedIndex={this.state.drugRegulation === 'Prescription' ? 1 : 0}
+          menuItems={options}
+          labelStyle={{fontFamily: 'Roboto, sans-serif'}}
+          onChange={this._handleRegulationOnChange} />
         <br />
         <TextField
           hintText="Symptoms"
-          floatingLabelText="Symptoms" />
+          ref="symptomField"
+          floatingLabelText="Symptoms"
+          onChange={this._handleSymptomsOnChange} />
         <br />
         <TextField
           hintText="Interactions"
-          floatingLabelText="Interactions" />
+          ref="interactionsField"
+          floatingLabelText="Interactions"
+          onChange={this._handleInteractionsOnChange} />
         <br />
         <TextField
           hintText="Dosage"
-          floatingLabelText="Dosage" />
+          ref="dosageField"
+          floatingLabelText="Dosage"
+          onChange={this._handleDosageOnChange} />
         <br />
-        <RaisedButton label="Submit" primary={true} onClick={this._handleItemSubmit}/>
+        <RaisedButton
+          label="Submit"
+          primary={true}
+          disabled={this._validateFieldsPopulated()}
+          onClick={this._handleItemSubmit} />
       </div>
     )
   }

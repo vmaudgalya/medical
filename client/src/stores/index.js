@@ -1,29 +1,20 @@
 import Reflux from 'Reflux'
 import DashboardActions from '../actions/DashboardActions'
-import _ from 'lodash'
-
-let users = [
-    {"username":"admin", "password":"admin"},
-    {"username":"user2", "password":"password2"},
-    {"username":"user3","password":"password3"}
-]
 
 let state = {
   isLoading: false,
   loggedIn: false,
   username: null,
-  usernameErrorText: "",
-  passwordErrorText: "",
-  fixedHeader: true,
-  fixedFooter: false,
-  stripedRows: false,
-  showRowHover: true,
-  selectable: true,
-  multiSelectable: true,
-  enableSelectAll: false,
-  deselectOnClickaway: true,
-  height: '300px',
-  selectedTab: 0
+  usernameErrorText: '',
+  passwordErrorText: '',
+  selectedTab: 0,
+  drugRegulation: '',
+  drugName: '',
+  drugClass: '',
+  drugSymptoms: '',
+  drugInteractions: '',
+  drugDosage: '',
+  isEditing: false // if its true, we'll do an UPDATE instead of an INSERT
 }
 
 const Store = Reflux.createStore({
@@ -47,12 +38,14 @@ const Store = Reflux.createStore({
   },
 
   onLoginFailed(response) {
-    console.error('Server is down: ' + response);
+    console.error('Server is down: ' + response)
   },
 
   onLogout() {
     state.username = null;
     state.loggedIn = false;
+    state.usernameErrorText = ''
+    state.passwordErrorText = ''
     this.trigger(state);
   }
 

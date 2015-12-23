@@ -5,7 +5,7 @@ import DrugDetails from './DrugDetails'
 import DrugList from './DrugList'
 import DashboardActions from '../actions/DashboardActions'
 import Store from '../stores'
-import { History, Link } from 'react-router'
+import { History } from 'react-router'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
 
@@ -22,7 +22,6 @@ const Container = React.createClass({
       console.info('redirecting unauthorized user')
       this.history.pushState(null, '/login', null)
     }
-
   },
 
   componentWillMount() {
@@ -67,9 +66,9 @@ const Container = React.createClass({
 
     return (
       <div>
-        <AppBar style={styles.appBar} title="Amazing Medical App" showMenuIconButton={false} >
+        <AppBar style={styles.appBar} title="Medical App" showMenuIconButton={false} >
           <Tabs style={styles.tabs} onChange={this._handleChangeTabs} inkBarStyle={styles.inkBar} >
-            <Tab style={styles.tab} label="ADD" value="0" />
+            <Tab style={styles.tab} label={(this.state.isEditing && (this.state.selectedTab === 0)) ? "EDIT" : "ADD"} value="0" />
             <Tab style={styles.tab} label="REVIEW" value="1" />
           </Tabs>
           <FlatButton style={styles.logout} onClick={this._handleLogout}>LOGOUT</FlatButton>

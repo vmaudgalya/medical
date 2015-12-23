@@ -50,6 +50,46 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /drugs:
+    x-swagger-router-controller: operations
+    post:
+      description: Add drug to database
+      operationId: add_drug
+      parameters:
+        - name: drug
+          in: body
+          description: The drug object of the drug to insert into the db
+          required: true
+          schema:
+            required:
+              - drugName
+              - drugClass
+              - drugRegulation
+              - drugSymptoms
+              - drugInteractions
+              - drugDosage
+            properties:
+              drugName:
+                type: string
+              drugClass:
+                type: string
+              drugRegulation:
+                type: string
+              drugSymptoms:
+                type: string
+              drugInteractions:
+                type: string
+              drugDosage:
+                type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/DoctorResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /logout:
     x-swagger-router-controller: authentication
     post:

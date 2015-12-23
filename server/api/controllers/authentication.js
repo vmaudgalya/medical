@@ -10,7 +10,6 @@
 
   It is a good idea to list the modules that your application depends on in the package.json in the project root
  */
-var util = require('util');
 var r = require('rethinkdb');
 var _ = require('lodash');
 var logger = require('../../lib/logger');

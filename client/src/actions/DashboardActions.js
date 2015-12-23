@@ -4,7 +4,8 @@ import $ from 'jquery'
 const DashboardActions = Reflux.createActions({
 
   login : { children: ["completed", "failed"] },
-  logout : {}
+  logout : {},
+  addDrug : { children: ["completed", "failed"] }
 
 });
 
@@ -15,7 +16,7 @@ DashboardActions.login.listen(function (username, password) {
         contentType: "application/json",
         // dataType: "json",
         // processData: false,
-        data: JSON.stringify({username : username, password : password})
+        data: JSON.stringify({ username, password })
     }).done(this.completed.bind(this))
     .fail(this.failed.bind(this));
 });
@@ -25,8 +26,18 @@ DashboardActions.logout.listen(function (username) {
         url: "http://localhost:10010/medicalapp/logout",
         type: "post",
         contentType: "application/json",
-        data: JSON.stringify({username : username})
+        data: JSON.stringify({ username })
     });
+});
+
+DashboardActions.addDrug.listen(function (drug) {
+    $.ajax({
+        url: "http://localhost:10010/medicalapp/drugs",
+        type: "post",
+        contentType: "application/json",
+        data: JSON.stringify(drug)
+    }).done(this.completed.bind(this))
+    .fail(this.failed.bind(this));
 });
 
 // DashboardActions.getDrugs.listen(function () {
