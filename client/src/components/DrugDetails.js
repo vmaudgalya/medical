@@ -12,15 +12,16 @@ const DrugDetails = React.createClass({
   mixins: [Reflux.connect(Store), History],
 
   _handleItemSubmit() {
-    // submit based on state of all input fields
+    let today = new Date()
     let drug = {
       drugName: this.state.drugName,
       drugClass: this.state.drugClass,
-      drugRegulation: this.state.drugRegulation,
+      drugRegulation: (this.state.drugRegulation ? this.state.drugRegulation : 'Over the counter'),
       drugSymptoms: this.state.drugSymptoms,
       drugInteractions: this.state.drugInteractions,
       drugDosage: this.state.drugDosage,
-      username: this.state.username
+      username: this.state.username,
+      date: `${today.getFullYear()}-${(today.getMonth()%12)+1}-${today.getDate()}`
     }
     if (this.state.isEditing) {
       console.log('editting drug right now')
@@ -76,7 +77,6 @@ const DrugDetails = React.createClass({
        { payload: '1', text: 'Over the counter' },
        { payload: '2', text: 'Prescription' }
     ]
-
     return (
       <div className="drugDetails">
         <TextField
@@ -93,6 +93,7 @@ const DrugDetails = React.createClass({
         <br />
         <DropDownMenu
           selectedIndex={this.state.drugRegulation === 'Prescription' ? 1 : 0}
+          ref="regulationMenu"
           menuItems={options}
           labelStyle={{fontFamily: 'Roboto, sans-serif'}}
           onChange={this._handleRegulationOnChange} />

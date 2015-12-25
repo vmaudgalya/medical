@@ -61,31 +61,30 @@ paths:
           description: The drug object of the drug to insert into the db
           required: true
           schema:
-            required:
-              - drugName
-              - drugClass
-              - drugRegulation
-              - drugSymptoms
-              - drugInteractions
-              - drugDosage
-            properties:
-              drugName:
-                type: string
-              drugClass:
-                type: string
-              drugRegulation:
-                type: string
-              drugSymptoms:
-                type: string
-              drugInteractions:
-                type: string
-              drugDosage:
-                type: string
+            $ref: "#/definitions/DrugSchema"
       responses:
         "200":
           description: Success
           schema:
             $ref: "#/definitions/DoctorResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      description: Get all drugs from the database
+      operationId: get_drugs
+      parameters:
+        - name: limit
+          in: query
+          description: max records to return
+          required: false
+          type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/DrugsResponse"
         default:
           description: Error
           schema:
@@ -125,6 +124,41 @@ definitions:
     properties:
       message:
         type: string
+  DrugSchema:
+    required:
+      - drugName
+      - drugClass
+      - drugRegulation
+      - drugSymptoms
+      - drugInteractions
+      - drugDosage
+      - username
+      - date
+    properties:
+      drugName:
+        type: string
+      drugClass:
+        type: string
+      drugRegulation:
+        type: string
+      drugSymptoms:
+        type: string
+      drugInteractions:
+        type: string
+      drugDosage:
+        type: string
+      username:
+        type: string
+      date:
+        type: string
+        format: date
+  DrugsResponse:
+    required:
+      - drugs
+    properties:
+      drugs:
+        type: array
+        items: {}
   ErrorResponse:
     required:
       - message

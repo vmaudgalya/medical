@@ -49,26 +49,25 @@ function authdoc(req, res) {
 
   r.db('medical').table('doctors').filter(r.row('username').eq(username).and(r.row('password').eq(password)))
     .run(db.getConnection(), function(err, cursor) {
-      if (err) throw err;
+      if (err) res.status(500).json(JSON.stringify({username: username, isAuthorized: isAuthorized}));
       cursor.toArray(function(err, results) {
         if (err) throw err;
         if (results.length > 0) isAuthorized = true;
         if (isAuthorized) {
           logger.info('user authenticated', {origin: req.headers.origin}, {user: doctor});
+          res.status(200).json(JSON.stringify({username: username, isAuthorized: isAuthorized}));
         } else {
           logger.info('user failed to authenticate', {origin: req.headers.origin}, {user: doctor});
+          res.status(401).json(JSON.stringify({username: username, isAuthorized: isAuthorized}));
         }
-        res.json(JSON.stringify({username: username, isAuthorized: isAuthorized}));
+      });
     });
-  });
-
-
-  // this sends back a JSON response which is a single string
-  // res.json(message);
 }
 
 function logout(req, res) {
+
   var username = req.swagger.params.username.value;
   logger.info('user logout', {user: username});
   res.json('user logged out');
+
 }

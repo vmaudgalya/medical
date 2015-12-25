@@ -14,7 +14,7 @@ const Container = React.createClass({
   mixins: [Reflux.connect(Store), History],
 
   _handleChangeTabs(value, e, tab) {
-    this.setState({ selectedTab: Number(value) })
+    DashboardActions.switchTab(Number(value))
   },
 
   componentDidUpdate() {
@@ -43,7 +43,8 @@ const Container = React.createClass({
       },
       tabs: {
         paddingTop: '20px',
-        width: '20%'
+        width: '20%',
+        marginRight: '30px'
       },
       tab: {
         paddingBottom: '10px',

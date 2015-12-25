@@ -5,7 +5,9 @@ const DashboardActions = Reflux.createActions({
 
   login : { children: ["completed", "failed"] },
   logout : {},
-  addDrug : { children: ["completed", "failed"] }
+  addDrug : { children: ["completed", "failed"] },
+  getAllDrugs : { children: ["completed", "failed"] },
+  switchTab: {}
 
 });
 
@@ -39,6 +41,12 @@ DashboardActions.addDrug.listen(function (drug) {
     }).done(this.completed.bind(this))
     .fail(this.failed.bind(this));
 });
+
+DashboardActions.getAllDrugs.listen(function () {
+    $.get("http://localhost:10010/medicalapp/drugs", {mode : "json"}).done(this.completed.bind(this))
+        .fail(this.failed.bind(this));
+});
+
 
 // DashboardActions.getDrugs.listen(function () {
 //     $.get("/medicalapp/drugs", {mode : "json"}).done(this.completed.bind(this))

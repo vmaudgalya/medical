@@ -14,7 +14,8 @@ let state = {
   drugSymptoms: '',
   drugInteractions: '',
   drugDosage: '',
-  isEditing: false // if its true, we'll do an UPDATE instead of an INSERT
+  isEditing: false, // if its true, we'll do an UPDATE instead of an INSERT
+  drugs: []
 }
 
 const Store = Reflux.createStore({
@@ -41,12 +42,36 @@ const Store = Reflux.createStore({
     console.error('Server is down: ' + response)
   },
 
+  onGetAllDrugsCompleted(response) {
+    state.drugs = response
+    this.trigger(state)
+  },
+
+  onGetAllDrugsFailed(response) {
+    console.error('Server is down: ' + response)
+  },
+
+  onSwitchTab(value) {
+    state.selectedTab = value
+    this.trigger(state)
+  },
+
   onLogout() {
-    state.username = null;
-    state.loggedIn = false;
+    state.isLoading = false
+    state.loggedIn = false
+    state.username = null
     state.usernameErrorText = ''
     state.passwordErrorText = ''
-    this.trigger(state);
+    state.selectedTab = 0
+    state.drugRegulation = ''
+    state.drugName = ''
+    state.drugClass = ''
+    state.drugSymptoms = ''
+    state.drugInteractions = ''
+    state.drugDosage = ''
+    state.isEditing = false
+    state.drugs = []
+    this.trigger(state)
   }
 
 })

@@ -12,7 +12,7 @@ const DrugList = React.createClass({
   mixins: [Reflux.connect(Store), History],
 
   componentWillMount() {
-    // Fetch medicines from db
+    DashboardActions.getAllDrugs()
   },
 
   _onRowSelection(selectedRows) {
@@ -29,17 +29,18 @@ const DrugList = React.createClass({
   },
 
   render() {
-    let rows = []
-    for (let i = 1; i <= 50; i++) {
-      rows.push(
-        <TableRow key={i}>
-          <TableRowColumn>{i}</TableRowColumn>
-          <TableRowColumn>Benadryl</TableRowColumn>
-          <TableRowColumn>Allergy Medication</TableRowColumn>
-          <TableRowColumn>admin</TableRowColumn>
+    let drugs = this.state.drugs.map((item) => {
+      let drug = item.drug
+      return (
+        <TableRow key={item.id}>
+          <TableRowColumn>{drug.drugName}</TableRowColumn>
+          <TableRowColumn>{drug.drugClass}</TableRowColumn>
+          <TableRowColumn>{drug.drugRegulation}</TableRowColumn>
+          <TableRowColumn>{drug.username}</TableRowColumn>
+          <TableRowColumn>{drug.date ? drug.date : 'no date specified'}</TableRowColumn>
         </TableRow>
       )
-    }
+    })
 
     return (
       <div>
@@ -50,22 +51,24 @@ const DrugList = React.createClass({
           onRowSelection={this._onRowSelection}>
           <TableHeader displaySelectAll={false}>
             <TableRow>
-              <TableHeaderColumn colSpan="4" tooltip='Super Header' style={{textAlign: 'center'}}>
+              <TableHeaderColumn colSpan="5" style={{textAlign: 'center'}}>
                 Drug List
               </TableHeaderColumn>
             </TableRow>
             <TableRow>
-              <TableHeaderColumn tooltip='The ID'>ID</TableHeaderColumn>
               <TableHeaderColumn tooltip='Drug Name'>Name</TableHeaderColumn>
-              <TableHeaderColumn tooltip='Drug Type'>Type</TableHeaderColumn>
+              <TableHeaderColumn tooltip='Drug Class'>Class</TableHeaderColumn>
+              <TableHeaderColumn tooltip='Drug Regulation'>Regulation</TableHeaderColumn>
               <TableHeaderColumn tooltip='User who added this drug'>User</TableHeaderColumn>
+              <TableHeaderColumn tooltip='Date drug added (YYYY-MM-DD)'>Date</TableHeaderColumn>
+
             </TableRow>
           </TableHeader>
           <TableBody
             deselectOnClickaway={true}
             showRowHover={true}
             >
-            {rows}
+            {drugs}
           </TableBody>
         </Table>
         <div style={{float: 'right', margin: '20px 50px 0px 0px'}}>
