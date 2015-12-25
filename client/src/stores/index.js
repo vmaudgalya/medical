@@ -15,7 +15,9 @@ let state = {
   drugInteractions: '',
   drugDosage: '',
   isEditing: false, // if its true, we'll do an UPDATE instead of an INSERT
-  drugs: []
+  drugs: [],
+  selectedDrugId: null,
+  selectedRow: -1
 }
 
 const Store = Reflux.createStore({
@@ -51,8 +53,25 @@ const Store = Reflux.createStore({
     console.error('Server is down: ' + response)
   },
 
+  onDeleteDrugCompleted(response) {
+    state.selectedRow = -1
+    this.trigger(state)
+    DashboardActions.getAllDrugs()
+  },
+
+  onDeleteDrugFailed(response) {
+    console.error('Server is down: ' + response)
+  },
+
   onSwitchTab(value) {
     state.selectedTab = value
+    this.trigger(state)
+  },
+
+  onSelectRow(rowNumber, id) {
+    // console.log(`Row ${rowNumber} was selected with id:${id}`)
+    state.selectedRow = rowNumber
+    state.selectedDrugId = id
     this.trigger(state)
   },
 
@@ -71,6 +90,8 @@ const Store = Reflux.createStore({
     state.drugDosage = ''
     state.isEditing = false
     state.drugs = []
+    state.selectedDrugId = null
+    state.selectedRow = -1
     this.trigger(state)
   }
 

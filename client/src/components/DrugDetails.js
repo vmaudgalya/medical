@@ -1,6 +1,6 @@
 import Reflux from 'Reflux'
 import React from 'react'
-import { RaisedButton, TextField, DropDownMenu } from 'material-ui'
+import { RaisedButton, TextField, SelectField } from 'material-ui'
 import DashboardActions from '../actions/DashboardActions'
 import Store from '../stores'
 import { History } from 'react-router'
@@ -91,11 +91,11 @@ const DrugDetails = React.createClass({
           floatingLabelText="Class"
           onChange={this._handleClassOnChange} />
         <br />
-        <DropDownMenu
+        <SelectField
+          style={{marginTop: '20px'}}
           selectedIndex={this.state.drugRegulation === 'Prescription' ? 1 : 0}
           ref="regulationMenu"
           menuItems={options}
-          labelStyle={{fontFamily: 'Roboto, sans-serif'}}
           onChange={this._handleRegulationOnChange} />
         <br />
         <TextField

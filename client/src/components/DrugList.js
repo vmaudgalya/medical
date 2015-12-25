@@ -16,23 +16,41 @@ const DrugList = React.createClass({
   },
 
   _onRowSelection(selectedRows) {
-    console.log('row selected: ' + selectedRows)
-    // save this to state
+    let rowNumber = -1
+    let drugId = null
+    if (selectedRows.length < 1) {
+      rowNumber = -1
+      drugId = null
+    } else {
+      rowNumber = selectedRows[0]
+      drugId = this.state.drugs[rowNumber].id
+    }
+    // console.log('the item is: ' + this.state.drugs[selectedRow].drug.drugName)
+    // console.log('the item is: ' + this.state.drugs[rowNumber].id)
+    DashboardActions.selectRow(rowNumber, drugId)
+
   },
 
-  _handleEditClick() {
+  _handleEditClick(e) {
     // GET drug info by ID via an action, set the state in the store, then trigger and set selectedIndex to 0
+    if (this.state.selectedDrugId === null) {
+      return
+    }
+    console.log('Editing: ' + this.state.selectedDrugId)
   },
 
-  _handleDeleteClick() {
-    // get drug by ID and delete it from the db
+  _handleDeleteClick(e) {
+    if (this.state.selectedDrugId === null) {
+      return
+    }
+    DashboardActions.deleteDrug(this.state.selectedDrugId)
   },
 
   render() {
-    let drugs = this.state.drugs.map((item) => {
+    let drugs = this.state.drugs.map((item, index) => {
       let drug = item.drug
       return (
-        <TableRow key={item.id}>
+        <TableRow key={item.id} selected={this.state.selectedRow === index}>
           <TableRowColumn>{drug.drugName}</TableRowColumn>
           <TableRowColumn>{drug.drugClass}</TableRowColumn>
           <TableRowColumn>{drug.drugRegulation}</TableRowColumn>
@@ -48,7 +66,8 @@ const DrugList = React.createClass({
           height='300px'
           fixedHeader={true}
           selectable={true}
-          onRowSelection={this._onRowSelection}>
+          onRowSelection={this._onRowSelection}
+          style={{fontFamily: 'Roboto, sans-serif'}} >
           <TableHeader displaySelectAll={false}>
             <TableRow>
               <TableHeaderColumn colSpan="5" style={{textAlign: 'center'}}>
@@ -61,11 +80,10 @@ const DrugList = React.createClass({
               <TableHeaderColumn tooltip='Drug Regulation'>Regulation</TableHeaderColumn>
               <TableHeaderColumn tooltip='User who added this drug'>User</TableHeaderColumn>
               <TableHeaderColumn tooltip='Date drug added (YYYY-MM-DD)'>Date</TableHeaderColumn>
-
             </TableRow>
           </TableHeader>
           <TableBody
-            deselectOnClickaway={true}
+            deselectOnClickaway={false}
             showRowHover={true}
             >
             {drugs}

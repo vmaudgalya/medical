@@ -89,6 +89,31 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /drug:
+    x-swagger-router-controller: operations
+    post:
+      description: Delete drug from database
+      operationId: delete_drug
+      parameters:
+        - name: id
+          in: body
+          description: The id of the drug to delete from the db
+          required: true
+          schema:
+            required:
+              - drugId
+            properties:
+              drugId:
+                type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/DoctorResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /logout:
     x-swagger-router-controller: authentication
     post:
