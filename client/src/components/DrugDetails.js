@@ -11,27 +11,6 @@ const DrugDetails = React.createClass({
 
   mixins: [Reflux.connect(Store), History],
 
-  _handleItemSubmit() {
-    let today = new Date()
-    let drug = {
-      drugName: this.state.drugName,
-      drugClass: this.state.drugClass,
-      drugRegulation: (this.state.drugRegulation ? this.state.drugRegulation : 'Over the counter'),
-      drugSymptoms: this.state.drugSymptoms,
-      drugInteractions: this.state.drugInteractions,
-      drugDosage: this.state.drugDosage,
-      username: this.state.username,
-      date: `${today.getFullYear()}-${(today.getMonth()%12)+1}-${today.getDate()}`
-    }
-    if (this.state.isEditing) {
-      console.log('editting drug right now')
-      // DashboardActions.updateDrug(drug)
-    } else {
-      DashboardActions.addDrug(drug)
-      console.log('submitted drug: ' + JSON.stringify(drug))
-    }
-  },
-
   _handleNameOnChange(e) {
     this.setState({ drugName: e.target.value })
   },
@@ -64,6 +43,30 @@ const DrugDetails = React.createClass({
     return true
   },
 
+  _handleItemSubmit() {
+    let today = new Date()
+    let drug = {
+      drugName: this.state.drugName,
+      drugClass: this.state.drugClass,
+      drugRegulation: (this.state.drugRegulation ? this.state.drugRegulation : 'Over the counter'),
+      drugSymptoms: this.state.drugSymptoms,
+      drugInteractions: this.state.drugInteractions,
+      drugDosage: this.state.drugDosage,
+      username: this.state.username,
+      date: `${today.getFullYear()}-${(today.getMonth()%12)+1}-${today.getDate()}`
+    }
+    if (this.state.isEditing) {
+      DashboardActions.updateDrug(drug, this.state.selectedDrugId)
+    } else {
+      DashboardActions.addDrug(drug)
+      console.log('submitted drug: ' + JSON.stringify(drug))
+    }
+  },
+
+  _handleCancel() {
+    DashboardActions.cancelEditDrug()
+  },
+
   componentDidMount() {
     this.refs.drugNameField.setValue(this.state.drugName)
     this.refs.classField.setValue(this.state.drugClass)
@@ -77,6 +80,7 @@ const DrugDetails = React.createClass({
        { payload: '1', text: 'Over the counter' },
        { payload: '2', text: 'Prescription' }
     ]
+
     return (
       <div className="drugDetails">
         <TextField
@@ -116,8 +120,10 @@ const DrugDetails = React.createClass({
           floatingLabelText="Dosage"
           onChange={this._handleDosageOnChange} />
         <br />
+        {this.state.isEditing ? <RaisedButton label="Cancel" secondary={true} onClick={this._handleCancel}/> : ''}
+        {this.state.isEditing ? ' ' : ''}
         <RaisedButton
-          label="Submit"
+          label={this.state.isEditing ? 'Update' : 'Submit'}
           primary={true}
           disabled={this._validateFieldsPopulated()}
           onClick={this._handleItemSubmit} />

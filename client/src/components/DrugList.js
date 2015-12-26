@@ -18,24 +18,25 @@ const DrugList = React.createClass({
   _onRowSelection(selectedRows) {
     let rowNumber = -1
     let drugId = null
+    let drug = null
     if (selectedRows.length < 1) {
       rowNumber = -1
       drugId = null
+      drug = null
     } else {
       rowNumber = selectedRows[0]
       drugId = this.state.drugs[rowNumber].id
+      drug = this.state.drugs[rowNumber].drug
     }
-    // console.log('the item is: ' + this.state.drugs[selectedRow].drug.drugName)
-    // console.log('the item is: ' + this.state.drugs[rowNumber].id)
-    DashboardActions.selectRow(rowNumber, drugId)
-
+    DashboardActions.selectRow(rowNumber, drugId, drug)
   },
 
   _handleEditClick(e) {
-    // GET drug info by ID via an action, set the state in the store, then trigger and set selectedIndex to 0
     if (this.state.selectedDrugId === null) {
       return
     }
+    DashboardActions.editDrug()
+    DashboardActions.switchTab('0')
     console.log('Editing: ' + this.state.selectedDrugId)
   },
 
@@ -43,7 +44,7 @@ const DrugList = React.createClass({
     if (this.state.selectedDrugId === null) {
       return
     }
-    DashboardActions.deleteDrug(this.state.selectedDrugId)
+    DashboardActions.deleteDrug(this.state.selectedDrugId, this.state.selectedDrug, this.state.username)
   },
 
   render() {

@@ -9,9 +9,12 @@ const DashboardActions = Reflux.createActions({
   getAllDrugs : { children: ["completed", "failed"] },
   switchTab: {},
   selectRow: {},
-  deleteDrug: { children: ["completed", "failed"] }
+  deleteDrug: { children: ["completed", "failed"] },
+  editDrug: {},
+  cancelEditDrug: {},
+  updateDrug: { children: ["completed", "failed"] }
 
-});
+})
 
 DashboardActions.login.listen(function (username, password) {
   $.ajax({
@@ -22,8 +25,8 @@ DashboardActions.login.listen(function (username, password) {
       // processData: false,
       data: JSON.stringify({ username, password })
   }).done(this.completed.bind(this))
-  .fail(this.failed.bind(this));
-});
+  .fail(this.failed.bind(this))
+})
 
 DashboardActions.logout.listen(function (username) {
   $.ajax({
@@ -31,8 +34,8 @@ DashboardActions.logout.listen(function (username) {
       type: "post",
       contentType: "application/json",
       data: JSON.stringify({ username })
-  });
-});
+  })
+})
 
 DashboardActions.addDrug.listen(function (drug) {
   $.ajax({
@@ -41,28 +44,32 @@ DashboardActions.addDrug.listen(function (drug) {
       contentType: "application/json",
       data: JSON.stringify(drug)
   }).done(this.completed.bind(this))
-  .fail(this.failed.bind(this));
-});
+  .fail(this.failed.bind(this))
+})
 
-DashboardActions.deleteDrug.listen(function (drugId) {
+DashboardActions.deleteDrug.listen(function (drugId, drug, username) {
   $.ajax({
       url: "http://localhost:10010/medicalapp/drug",
       type: "post",
       contentType: "application/json",
-      data: JSON.stringify({ drugId })
+      data: JSON.stringify({ drugId, drug, username })
   }).done(this.completed.bind(this))
-  .fail(this.failed.bind(this));
-});
+  .fail(this.failed.bind(this))
+})
 
 DashboardActions.getAllDrugs.listen(function () {
-    $.get("http://localhost:10010/medicalapp/drugs", {mode : "json"}).done(this.completed.bind(this))
-        .fail(this.failed.bind(this));
-});
+  $.get("http://localhost:10010/medicalapp/drugs", {mode : "json"}).done(this.completed.bind(this))
+      .fail(this.failed.bind(this))
+})
 
+DashboardActions.updateDrug.listen(function (drug, drugId) {
+  $.ajax({
+      url: "http://localhost:10010/medicalapp/update",
+      type: "post",
+      contentType: "application/json",
+      data: JSON.stringify({drug, drugId})
+  }).done(this.completed.bind(this))
+  .fail(this.failed.bind(this))
+})
 
-// DashboardActions.getDrugs.listen(function () {
-//     $.get("/medicalapp/drugs", {mode : "json"}).done(this.completed.bind(this))
-//         .fail(this.failed.bind(this));
-// });
-
-export default DashboardActions;
+export default DashboardActions

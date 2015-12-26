@@ -9,7 +9,8 @@ var db = require('../../lib/database');
 module.exports = {
   add_drug: add_drug,
   get_drugs: get_drugs,
-  delete_drug: delete_drug
+  delete_drug: delete_drug,
+  update_drug: update_drug
 };
 
 
@@ -50,14 +51,33 @@ function get_drugs(req, res) {
 
 function delete_drug(req, res) {
 
-  var drugId = req.swagger.params.id.value.drugId;
-  console.log('THE DRUG ID IS: ' + drugId);
+  var drugId = req.swagger.params.parameters.value.drugId;
+  var drug = req.swagger.params.parameters.value.drug;
+  var username = req.swagger.params.parameters.value.username;
+
   r.db('medical').table('drugs').get(drugId).delete().run(db.getConnection(), function(err) {
     if (err) {
       logger.error('Error deleting drug', {origin: req.headers.origin}, {err: err});
       res.status(500).json('internal server error')
     } else {
-      logger.info('Deleting drug from database', {origin: req.headers.origin});
+      logger.info('Deleting drug from database', {origin: req.headers.origin}, {drug: drug}, {user: username});
+      res.status(200).json('success');
+    }
+  });
+
+}
+
+function update_drug(req, res) {
+
+  var drug = req.swagger.params.drug.value.drug;
+  var drugId = req.swagger.params.drug.value.drugId;
+  
+  r.db('medical').table('drugs').get(drugId).update({drug: drug}).run(db.getConnection(), function(err) {
+    if (err) {
+      logger.error('Error updating drug', {origin: req.headers.origin}, {err: err});
+      res.status(500).json('internal server error')
+    } else {
+      logger.info('Updated drug in database', {origin: req.headers.origin}, {user: drug.username}, {drug: drug});
       res.status(200).json('success');
     }
   });

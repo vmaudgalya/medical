@@ -7,7 +7,7 @@ let state = {
   username: null,
   usernameErrorText: '',
   passwordErrorText: '',
-  selectedTab: 0,
+  selectedTab: '0',
   drugRegulation: '',
   drugName: '',
   drugClass: '',
@@ -17,7 +17,8 @@ let state = {
   isEditing: false, // if its true, we'll do an UPDATE instead of an INSERT
   drugs: [],
   selectedDrugId: null,
-  selectedRow: -1
+  selectedRow: -1,
+  selectedDrug: null
 }
 
 const Store = Reflux.createStore({
@@ -46,6 +47,9 @@ const Store = Reflux.createStore({
 
   onGetAllDrugsCompleted(response) {
     state.drugs = response
+    if (state.selectedDrug) {
+      state.selectedDrug = state.drugs[state.selectedRow].drug
+    }
     this.trigger(state)
   },
 
@@ -55,6 +59,8 @@ const Store = Reflux.createStore({
 
   onDeleteDrugCompleted(response) {
     state.selectedRow = -1
+    state.selectedDrugId = null
+    state.selectedDrug = null
     this.trigger(state)
     DashboardActions.getAllDrugs()
   },
@@ -63,16 +69,49 @@ const Store = Reflux.createStore({
     console.error('Server is down: ' + response)
   },
 
+  onUpdateDrugCompleted(response) {
+    // Clear editing mode and show list
+    DashboardActions.cancelEditDrug()
+  },
+
+  onUpdateDrugFailed(response) {
+    console.error('Server is down: ' + response)
+  },
+
   onSwitchTab(value) {
     state.selectedTab = value
     this.trigger(state)
   },
 
-  onSelectRow(rowNumber, id) {
+  onSelectRow(rowNumber, id, drug) {
     // console.log(`Row ${rowNumber} was selected with id:${id}`)
     state.selectedRow = rowNumber
     state.selectedDrugId = id
+    state.selectedDrug = drug
     this.trigger(state)
+  },
+
+  onEditDrug() {
+    state.drugRegulation = state.selectedDrug.drugRegulation
+    state.drugName = state.selectedDrug.drugName
+    state.drugClass = state.selectedDrug.drugClass
+    state.drugSymptoms = state.selectedDrug.drugSymptoms
+    state.drugInteractions = state.selectedDrug.drugInteractions
+    state.drugDosage = state.selectedDrug.drugDosage
+    state.isEditing = true
+    this.trigger(state)
+  },
+
+  onCancelEditDrug() {
+    state.drugRegulation = ''
+    state.drugName = ''
+    state.drugClass = ''
+    state.drugSymptoms = ''
+    state.drugInteractions = ''
+    state.drugDosage = ''
+    state.isEditing = false
+    this.trigger(state)
+    DashboardActions.switchTab('1')
   },
 
   onLogout() {
@@ -81,7 +120,7 @@ const Store = Reflux.createStore({
     state.username = null
     state.usernameErrorText = ''
     state.passwordErrorText = ''
-    state.selectedTab = 0
+    state.selectedTab = '0'
     state.drugRegulation = ''
     state.drugName = ''
     state.drugClass = ''
@@ -92,6 +131,7 @@ const Store = Reflux.createStore({
     state.drugs = []
     state.selectedDrugId = null
     state.selectedRow = -1
+    state.selectedDrug = null
     this.trigger(state)
   }
 

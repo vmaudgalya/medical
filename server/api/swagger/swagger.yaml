@@ -95,14 +95,49 @@ paths:
       description: Delete drug from database
       operationId: delete_drug
       parameters:
-        - name: id
+        - name: parameters
           in: body
-          description: The id of the drug to delete from the db
+          description: The id and drug of the drug to delete from the db, and the user who is deleting it
           required: true
           schema:
             required:
               - drugId
+              - drug
             properties:
+              drugId:
+                type: string
+              drug:
+                type: object
+                $ref: "#/definitions/DrugSchema"
+              username:
+                type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/DoctorResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /update:
+    x-swagger-router-controller: operations
+    post:
+      description: Update drug in database
+      operationId: update_drug
+      parameters:
+        - name: drug
+          in: body
+          description: The drug object of the drug to update in the db
+          required: true
+          schema:
+            required:
+              - drug
+              - drugId
+            properties:
+              drug:
+                type: object
+                $ref: "#/definitions/DrugSchema"
               drugId:
                 type: string
       responses:

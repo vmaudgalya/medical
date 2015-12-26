@@ -14,7 +14,7 @@ const Container = React.createClass({
   mixins: [Reflux.connect(Store), History],
 
   _handleChangeTabs(value, e, tab) {
-    DashboardActions.switchTab(Number(value))
+    DashboardActions.switchTab(value)
   },
 
   componentDidUpdate() {
@@ -62,14 +62,14 @@ const Container = React.createClass({
         backgroundColor: 'rgba(0, 0, 0, 0)',
         color: 'rgba(255, 255, 255, 0.55)'
       }
-    };
-    let view = (this.state.selectedTab === 0 ? <DrugDetails /> : <DrugList />)
+    }
 
+    let view = (this.state.selectedTab === '0' ? <DrugDetails /> : <DrugList />)
     return (
       <div>
         <AppBar style={styles.appBar} title="Medical App" showMenuIconButton={false} >
-          <Tabs style={styles.tabs} onChange={this._handleChangeTabs} inkBarStyle={styles.inkBar} >
-            <Tab style={styles.tab} label={(this.state.isEditing && (this.state.selectedTab === 0)) ? "EDIT" : "ADD"} value="0" />
+          <Tabs style={styles.tabs} onChange={this._handleChangeTabs} inkBarStyle={styles.inkBar} value={this.state.selectedTab}>
+            <Tab style={styles.tab} label={(this.state.isEditing && (this.state.selectedTab === '0')) ? "EDIT" : "ADD"} value="0" />
             <Tab style={styles.tab} label="REVIEW" value="1" />
           </Tabs>
           <FlatButton style={styles.logout} onClick={this._handleLogout}>LOGOUT</FlatButton>
