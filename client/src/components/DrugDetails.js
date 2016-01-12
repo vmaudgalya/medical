@@ -45,6 +45,8 @@ const DrugDetails = React.createClass({
 
   _handleItemSubmit() {
     let today = new Date()
+    let month = (today.getMonth()%12)+1
+    month = (month < 10 ? '0' + month : month)
     let drug = {
       drugName: this.state.drugName,
       drugClass: this.state.drugClass,
@@ -53,7 +55,7 @@ const DrugDetails = React.createClass({
       drugInteractions: this.state.drugInteractions,
       drugDosage: this.state.drugDosage,
       username: this.state.username,
-      date: `${today.getFullYear()}-${(today.getMonth()%12)+1}-${today.getDate()}`
+      date: `${today.getFullYear()}-${month}-${today.getDate()}`
     }
     if (this.state.isEditing) {
       DashboardActions.updateDrug(drug, this.state.selectedDrugId)
